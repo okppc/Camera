@@ -1999,10 +1999,7 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
         }
     }
 
-    private void gotoGallery() {
-        MenuHelper.gotoCameraImageGallery(this);
-    }
-
+    
     private boolean isCameraIdle() {
         return (mCameraState == IDLE) || (mFocusManager.isFocusCompleted());
     }
@@ -2071,16 +2068,6 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
     }
 
     private void addBaseMenuItems(Menu menu) {
-        MenuHelper.addSwitchModeMenuItem(menu, ModePicker.MODE_VIDEO, new Runnable() {
-            public void run() {
-                switchToOtherMode(ModePicker.MODE_VIDEO);
-            }
-        });
-        MenuHelper.addSwitchModeMenuItem(menu, ModePicker.MODE_PANORAMA, new Runnable() {
-            public void run() {
-                switchToOtherMode(ModePicker.MODE_PANORAMA);
-            }
-        });
 
         if (mNumberOfCameras > 1) {
             menu.add(R.string.switch_camera_id)
@@ -2099,7 +2086,6 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
     private boolean switchToOtherMode(int mode) {
         if (isFinishing()) return false;
         if (mImageSaver != null) mImageSaver.waitDone();
-        MenuHelper.gotoMode(mode, Camera.this);
         mHandler.removeMessages(FIRST_TIME_INIT);
         finish();
         return true;
@@ -2128,9 +2114,7 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
             // animation.
             if (mIsImageCaptureIntent) {
                 // If the intent is camera capture, stay in camera capture mode.
-                MenuHelper.gotoCameraMode(this, getIntent());
             } else {
-                MenuHelper.gotoCameraMode(this);
             }
 
             finish();
@@ -2166,10 +2150,6 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
                 restorePreferences();
             }
         };
-        MenuHelper.confirmAction(this,
-                getString(R.string.confirm_restore_title),
-                getString(R.string.confirm_restore_message),
-                runnable);
     }
 
     private void restorePreferences() {
